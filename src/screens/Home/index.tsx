@@ -1,4 +1,12 @@
-import { Button, Flex, Text } from "@chakra-ui/react";
+import {
+  Button,
+  Flex,
+  Box,
+  Text,
+  Heading,
+  List,
+  ListItem,
+} from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import Header from "../../components/Header";
 import { openai } from "../../services/openai/config";
@@ -57,9 +65,48 @@ const Home: React.FC = () => {
     <>
       <Flex flexDir="column">
         <Header />
-        <Flex flex={1} px={8} py={10}>
-          <Button onClick={handleFetchReceipe}>Fetch receipe</Button>
-          {/* <Text whiteSpace="pre-line">{chatGPTRes}</Text> */}
+        <Flex py={4} justifyContent="center">
+          <Box maxW="1200px" w="full" flex={1} py={10}>
+            <Button onClick={handleFetchReceipe}>Fetch receipe</Button>
+            {chatGPTRes ? (
+              <Box mt={10}>
+                <Heading>List:</Heading>
+                <Box>
+                  {chatGPTRes?.map((rec: any) => (
+                    <Box
+                      mt={10}
+                      bgColor="#e8cff980"
+                      px={4}
+                      py={6}
+                      borderRadius={8}
+                    >
+                      <Heading size="md">{rec["Name"]}</Heading>
+                      <Heading size="sm" pt={5}>
+                        Ingredients:
+                      </Heading>
+                      <List>
+                        {rec["Ingredients"].map((ing: any) => (
+                          <ListItem pl={4}>
+                            <Text>{ing}</Text>
+                          </ListItem>
+                        ))}
+                      </List>
+                      <Heading size="sm" pt={5}>
+                        Instructions:
+                      </Heading>
+                      <List>
+                        {rec["Instructions"].map((ins: any) => (
+                          <ListItem pl={4}>
+                            <Text>{ins}</Text>
+                          </ListItem>
+                        ))}
+                      </List>
+                    </Box>
+                  ))}
+                </Box>
+              </Box>
+            ) : null}
+          </Box>
         </Flex>
       </Flex>
     </>

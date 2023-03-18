@@ -4,7 +4,7 @@ import {
   CreateCompletionResponseChoicesInner,
 } from "openai";
 const configuration = new Configuration({
-  apiKey: "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",
+  apiKey: "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",
 });
 export const openai = new OpenAIApi(configuration);
 
