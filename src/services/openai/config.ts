@@ -1,7 +1,15 @@
-import { Configuration, OpenAIApi } from "openai";
+import {
+  Configuration,
+  OpenAIApi,
+  CreateCompletionResponseChoicesInner,
+} from "openai";
 const configuration = new Configuration({
-  organization: "org-9B3idoDjnyrZLEcsWgr8wa9F",
-  apiKey: "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",
+  apiKey: "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",
 });
-const openai = new OpenAIApi(configuration);
-openai.listEngines();
+export const openai = new OpenAIApi(configuration);
+
+(async () => {
+  const res = await openai.listEngines();
+})();
+
+export type { CreateCompletionResponseChoicesInner };
