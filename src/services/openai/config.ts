@@ -4,12 +4,12 @@ import {
   CreateCompletionResponseChoicesInner,
 } from "openai";
 const configuration = new Configuration({
-  apiKey: "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",
+  apiKey: "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",
 });
 export const openai = new OpenAIApi(configuration);
 
 (async () => {
-  const res = await openai.listEngines();
+  await openai.listEngines();
 })();
 
 export type { CreateCompletionResponseChoicesInner };
