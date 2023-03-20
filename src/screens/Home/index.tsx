@@ -32,8 +32,8 @@ const formatIngredientOptions = (ingredients: string[]) => {
 };
 
 const Home: React.FC = () => {
-  const [receipes, setReceipes] = useState<any>(null);
-  const [receipesLoading, setReceipesLoading] = useState(false);
+  const [recipes, setRecipes] = useState<any>(null);
+  const [recipesLoading, setRecipesLoading] = useState(false);
   const [ingredientsLoading, setIngredientsLoading] = useState(false);
   const [ingredients, setIngredients] = useState<Option[]>([]);
   const [result, setResult] = useState<Option[]>([]);
@@ -61,46 +61,45 @@ const Home: React.FC = () => {
     }
   };
 
-  const handleFetchReceipes = async () => {
-    setReceipesLoading(true);
+  const handleFetchRecipes = async () => {
+    setRecipesLoading(true);
 
     try {
       const res = await openai.createCompletion({
         model: "text-davinci-003",
         prompt: `Give me an array of 2 recipes in JSON format only with the following ingredients:
-        - 2 Eggs
-        - 1 carrot
-        - cheese
-        - cream
+        ${result && result.map((item) => (
+          `- ${item.label}`
+        ))}
         
-        I need the properties Name, Ingredients and Instructions in JSON format for each receipe`,
+        I need the properties Name, Ingredients and Instructions in JSON format for each recipe`,
         max_tokens: 1100,
         top_p: 1,
         temperature: 0.7,
       });
 
-      setReceipesLoading(false);
+      setRecipesLoading(false);
 
-      const receipesData = formatDataFromAPI(res?.data);
-      setReceipes(receipesData);
+      const recipesData = formatDataFromAPI(res?.data);
+      setRecipes(recipesData);
     } catch (e) {
-      setReceipesLoading(false);
-      console.log("error fetching receipes: ", e);
+      setRecipesLoading(false);
+      console.log("error fetching recipes: ", e);
     }
   };
 
   useEffect(() => {
     handleFetchIngredients();
   }, []);
-  console.log("receipes: ", receipes);
-  console.log("receipesLoading: ", receipesLoading);
+  console.log("recipes: ", recipes);
+  console.log("recipesLoading: ", recipesLoading);
   console.log("ingredientsLoading: ", ingredientsLoading);
   console.log("ingredients: ", ingredients);
   console.log("result: ", result);
 
-  const disableFetchReceipesButton =
-    receipesLoading || ingredientsLoading || !ingredients.length;
-  console.log("disableFetchReceipesButton: ", disableFetchReceipesButton);
+  const disableFetchRecipesButton =
+    recipesLoading || ingredientsLoading || !ingredients.length;
+  console.log("disableFetchReceipesButton: ", disableFetchRecipesButton);
 
   return (
     <>
@@ -124,17 +123,17 @@ const Home: React.FC = () => {
               )}
             </Box>
             <Button
-              onClick={handleFetchReceipes}
-              isDisabled={disableFetchReceipesButton}
-              isLoading={receipesLoading}
+              onClick={handleFetchRecipes}
+              isDisabled={disableFetchRecipesButton}
+              isLoading={recipesLoading}
             >
-              Fetch receipes
+              Fetch recipes
             </Button>
-            {receipes && !receipesLoading ? (
+            {recipes && !recipesLoading ? (
               <Box mt={10}>
                 <Heading>List:</Heading>
                 <Box>
-                  {receipes?.map((rec: any) => (
+                  {recipes?.map((rec: any) => (
                     <Box
                       mt={10}
                       bgColor="#e8cff980"
@@ -167,8 +166,8 @@ const Home: React.FC = () => {
                   ))}
                 </Box>
               </Box>
-            ) : receipesLoading ? (
-              <Text>Loading receipes...</Text>
+            ) : recipesLoading ? (
+              <Text>Loading recipes...</Text>
             ) : null}
           </Box>
         </Flex>
